@@ -10,6 +10,7 @@ exports.getDoctor = async (req, res, next) => {
       return res.status(200).json({
         message: "exist",
         isDoctor: user.isDoctor,
+        user : user
       });
     }
 
@@ -23,7 +24,7 @@ exports.getDoctor = async (req, res, next) => {
 
 exports.postDoctor = async (req, res, next) => {
   try {
-    const { address, isDoctor } = req.body;
+    const { address, isDoctor,name } = req.body;
 
     const user = await User.findOne({ address: address });
 
@@ -31,13 +32,15 @@ exports.postDoctor = async (req, res, next) => {
       return res.status(200).json({
         message: "success",
         isDoctor: user.isDoctor,
+        user : user
       });
     }
-    
-    const newUser = await User.create({ address: address, isDoctor: isDoctor });
+
+    let newUser = newUser = await User.create({ address: address, isDoctor: isDoctor,name : name });
 
     return res.status(200).json({
       message: "success",
+      user : newUser
     });
   } catch (err) {
     console.log(err);

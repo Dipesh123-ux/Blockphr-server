@@ -11,8 +11,10 @@ app.use(express.json());
 app.use("*", cors());
 
 const authRoutes = require("./routes/auth");
+const documentRoutes = require("./routes/document")
 
 app.use("/api", authRoutes);
+app.use("/api/",documentRoutes);
 
 mongoose
   .connect(process.env.DATABASE_URL)
