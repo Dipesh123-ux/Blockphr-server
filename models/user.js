@@ -10,6 +10,12 @@ address: {
  isDoctor : {
     type : Boolean,
     default : false
+ },
+ aadharNumber : {
+    type : String,
+ },
+ gender : {
+   type : String,
  }
 });
 

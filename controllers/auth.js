@@ -10,7 +10,7 @@ exports.getDoctor = async (req, res, next) => {
       return res.status(200).json({
         message: "exist",
         isDoctor: user.isDoctor,
-        user : user
+        user: user,
       });
     }
 
@@ -24,7 +24,8 @@ exports.getDoctor = async (req, res, next) => {
 
 exports.postDoctor = async (req, res, next) => {
   try {
-    const { address, isDoctor,name } = req.body;
+   
+    const { address, isDoctor, name } = req.body;
 
     const user = await User.findOne({ address: address });
 
@@ -32,15 +33,51 @@ exports.postDoctor = async (req, res, next) => {
       return res.status(200).json({
         message: "success",
         isDoctor: user.isDoctor,
-        user : user
+        user: user,
       });
     }
 
-    let newUser = newUser = await User.create({ address: address, isDoctor: isDoctor,name : name });
+    const newUser = await User.create({
+      address: address,
+      isDoctor: isDoctor,
+      name: name,
+    });
 
     return res.status(200).json({
       message: "success",
-      user : newUser
+      user: newUser,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.addDoctorsDetails = async (req, res) => {
+  try {
+    console.log(req.body);
+    const { address, name ,aadharNumber,gender} = req.body;
+
+    const user = await User.findOne({ address: address, isDoctor : true });
+
+    if (user) {
+      return res.status(200).json({
+        message: "success",
+        isDoctor: user.isDoctor,
+        user: user,
+      });
+    }
+
+    const newUser = await User.create({
+      address: address,
+      isDoctor: true,
+      name: name,
+      aadharNumber,
+      gender
+    });
+
+    return res.status(200).json({
+      message: "success",
+      user: newUser,
     });
   } catch (err) {
     console.log(err);
