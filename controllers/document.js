@@ -52,6 +52,24 @@ exports.confirmRequest = async (req, res, next) => {
     res.status(500).json({ error: "An error occurred" });
   }
 };
+exports.rejectRequest = async (req, res, next) => {
+  const { requestId } = req.body;
+
+  try {
+    const request = await DocumentRequest.findById(requestId);
+    if (!request) {
+      return res.status(404).json({ message: "Request not found" });
+    }
+
+   await DocumentRequest.findByIdAndRemove(requestId);
+
+    res.json({ message: "rejected" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred" });
+  }
+};
+
 
 //for patients
 
@@ -61,6 +79,7 @@ exports.getAllReceivedRequsts = async (req, res) => {
   try {
     const requests = await DocumentRequest.find({
       patient: patientId,
+      status : "pending"
     }).populate("doctor");
     res.json(requests);
   } catch (error) {
@@ -92,6 +111,7 @@ exports.sentRequests = async (req, res) => {
   try {
     const requestsSent = await DocumentRequest.find({
       doctor: doctorId,
+      status: "pending",
     }).populate("patient");
     res.json(requestsSent);
   } catch (error) {

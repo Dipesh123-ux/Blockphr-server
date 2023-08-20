@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const {sendRequest,confirmRequest, getAllReceivedRequsts, getApprovedRequests,sentRequests, approvedRequests} = require('../controllers/document')
+const {sendRequest,confirmRequest, getAllReceivedRequsts, getApprovedRequests,sentRequests, approvedRequests,rejectRequest} = require('../controllers/document')
 
 router.post('/sendrequest',sendRequest);
 router.post('/confirmrequest',confirmRequest);
+router.post('/rejectrequest',rejectRequest);
 
 // for patients
 

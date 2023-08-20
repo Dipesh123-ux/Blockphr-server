@@ -24,8 +24,7 @@ exports.getDoctor = async (req, res, next) => {
 
 exports.postDoctor = async (req, res, next) => {
   try {
-   
-    const { address, isDoctor, name } = req.body;
+    const { address, isDoctor, name, aadharNumber } = req.body;
 
     const user = await User.findOne({ address: address });
 
@@ -41,6 +40,7 @@ exports.postDoctor = async (req, res, next) => {
       address: address,
       isDoctor: isDoctor,
       name: name,
+      aadharNumber,
     });
 
     return res.status(200).json({
@@ -54,10 +54,10 @@ exports.postDoctor = async (req, res, next) => {
 
 exports.addDoctorsDetails = async (req, res) => {
   try {
-    console.log(req.body);
-    const { address, name ,aadharNumber,gender} = req.body;
+   
+    const { address, name, aadharNumber, gender } = req.body;
 
-    const user = await User.findOne({ address: address, isDoctor : true });
+    const user = await User.findOne({ address: address, isDoctor: true });
 
     if (user) {
       return res.status(200).json({
@@ -72,12 +72,31 @@ exports.addDoctorsDetails = async (req, res) => {
       isDoctor: true,
       name: name,
       aadharNumber,
-      gender
+      gender,
     });
 
     return res.status(200).json({
       message: "success",
       user: newUser,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.getPatientByAadhar = async (req, res) => {
+  try {
+    const aadharNumber = req.params.aadharNumber;
+    const patient = await User.findOne({ aadharNumber: aadharNumber });
+    if (!patient) {
+      return res.status(404).json({
+        message: "Patient not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "success",
+      user: patient,
     });
   } catch (err) {
     console.log(err);
